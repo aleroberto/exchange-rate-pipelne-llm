@@ -1,0 +1,12 @@
+requests
+pandas
+pyarrow
+fastparquet
+sqlalchemy
+psycopg2-binary
+python-dotenv
+structlog
+pytest
+tenacity
+openai
+streamlit

@@ -1,0 +1,28 @@
+# Ambiente virtual
+venv/
+.env
+
+# Bytecode Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDEs e editores
+.vscode/
+.idea/
+
+# Logs e arquivos temporários
+*.log
+*.tmp
+
+# Dados gerados
+*.csv
+*.parquet
+
+# Streamlit cache (se usar)
+.streamlit/
+
+# Configurações do sistema
+.DS_Store
+Thumbs.db
