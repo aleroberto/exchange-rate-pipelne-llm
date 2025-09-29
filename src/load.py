@@ -3,6 +3,9 @@ import pandas as pd
 from sqlalchemy import create_engine
 from datetime import datetime
 import structlog
+import json
+from pathlib import Path
+import sqlite3
 
 logger = structlog.get_logger()
 
@@ -35,3 +38,14 @@ def aggregate_silver_files():
         logger.info("load_db_ok", table="exchange_rates", count=len(df))
 
     return gold_file
+
+
+def save_to_parquet(df: pd.DataFrame, outfile: str | Path):
+    """Salva DataFrame em arquivo parquet"""
+    df.to_parquet(outfile, index=False)
+
+def save_to_sqlite(df: pd.DataFrame, dbfile: str | Path, table_name: str):
+    """Salva DataFrame em banco SQLite"""
+    conn = sqlite3.connect(dbfile)
+    df.to_sql(table_name, conn, if_exists="replace", index=False)
+    conn.close()

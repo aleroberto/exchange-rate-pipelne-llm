@@ -49,3 +49,18 @@ def transform_file(filepath, expected_base="USD"):
     df.to_parquet(silver_file, engine="pyarrow", compression="snappy", index=False)
     logger.info("transform_ok", arquivo=silver_file, count=len(df))
     return silver_file
+
+def clean_data(df: pd.DataFrame) -> pd.DataFrame:
+    """Remove taxas nulas ou negativas e garante colunas esperadas."""
+    if df.empty:
+        return df
+
+    # Remove valores nulos ou negativos
+    df = df.dropna(subset=["rate"])
+    df = df[df["rate"] > 0]
+
+    # Mantém apenas colunas essenciais
+    expected_cols = ["currency", "rate"]
+    df = df[expected_cols]
+
+    return df.reset_index(drop=True)
