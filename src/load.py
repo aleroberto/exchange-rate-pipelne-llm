@@ -6,6 +6,7 @@ from sqlalchemy import create_engine
 from datetime import datetime
 from pathlib import Path
 from src.logging_config import get_logger, log_metrics
+from sqlalchemy import text
 
 SILVER_DIR = os.path.join(os.path.dirname(__file__), "../data/silver")
 GOLD_DIR = os.path.join(os.path.dirname(__file__), "../data/gold")
@@ -45,7 +46,8 @@ def aggregate_silver_files(run_id=None, date_str=None):
         engine = create_engine(DB_URI)
         with engine.connect() as conn:
             # Remove registros do mesmo dia antes de inserir
-            conn.execute("DELETE FROM exchange_rates WHERE date = :date", {"date": date_str})
+            conn.execute(text("DELETE FROM exchange_rates WHERE date = :date"), {"date": date_str})
+
         df.to_sql("exchange_rates", con=engine, if_exists="append", method="multi", index=False, chunksize=1000)
         logger.info("load_db_ok", table="exchange_rates", count=len(df))
 
