@@ -26,4 +26,4 @@ def test_full_pipeline(tmp_path):
 
     # reabre e valida
     df_check = pd.read_parquet(outfile)
-    assert set(df_check.columns).issuperset({"currency", "rate"})
+    assert set(df_check.columns).issuperset({"base_currency", "rate", "target_currency"})

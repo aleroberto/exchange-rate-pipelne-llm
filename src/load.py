@@ -32,6 +32,16 @@ def aggregate_silver_files(run_id=None, date_str=None):
     df = pd.concat(df_list, ignore_index=True)
     df.drop_duplicates(subset=["date", "base_currency", "target_currency"], inplace=True)
 
+    run_timestamp = datetime.utcnow().isoformat()
+    run_id = run_timestamp.replace(":", "").replace("-", "").replace("T", "_")
+    
+    # Adiciona colunas obrigatórias
+    df["run_id"] = run_id
+    df["pipeline_version"] = "1.0"
+    
+    # Converte retrieved_at para timestamp/int64
+    df["retrieved_at"] = pd.to_datetime(df["retrieved_at"]).astype("int64") // 10**9 
+
     # --- SALVA GOLD PARQUET (idempotente) ---
     gold_file = os.path.join(GOLD_DIR, f"{date_str}.parquet")
     df.to_parquet(gold_file, engine="pyarrow", compression="snappy", index=False)

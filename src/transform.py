@@ -56,15 +56,28 @@ def transform_file(filepath, run_id=None, expected_base="USD"):
     log_metrics(logger, "transform", df.shape[0], elapsed)
 
     return silver_file
-
-def clean_data(df: pd.DataFrame) -> pd.DataFrame:
-    """Remove taxas nulas ou negativas e garante colunas essenciais."""
+def clean_data(df: pd.DataFrame, default_base="USD") -> pd.DataFrame:
+    """Remove taxas nulas/negativas e garante colunas esperadas."""
     if df.empty:
         return df
+
+    # Remove valores nulos ou negativos
     df = df.dropna(subset=["rate"])
     df = df[df["rate"] > 0]
+
+    # Se o dataframe veio do ingest, pode ter 'currency' em vez de 'target_currency'
+    if "currency" in df.columns and "target_currency" not in df.columns:
+        df = df.rename(columns={"currency": "target_currency"})
+
+    # Garantir colunas esperadas
+    if "base_currency" not in df.columns:
+        df["base_currency"] = default_base
+
     expected_cols = ["base_currency", "target_currency", "rate"]
-    return df[expected_cols].reset_index(drop=True)
+    df = df[expected_cols]
+
+    return df.reset_index(drop=True)
+
 
 def main(date_str=None):
     if not date_str:
