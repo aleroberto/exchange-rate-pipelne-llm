@@ -1,6 +1,8 @@
 import pandas as pd
 from src import transform
 from datetime import datetime
+import json
+
 
 def test_transform_file(tmp_path):
     # Criar arquivo JSON de exemplo

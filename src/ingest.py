@@ -49,3 +49,23 @@ def fetch_exchange_rates(base_currency="USD"):
     except requests.RequestException as e:
         logger.error("fetch_exception", service="ingest", error=str(e))
         raise
+
+def load_local_file(filepath: str):
+    """Carrega um arquivo JSON local de câmbio em DataFrame"""
+    import pandas as pd
+
+    if not os.path.exists(filepath):
+        raise FileNotFoundError(f"Arquivo não encontrado: {filepath}")
+
+    with open(filepath, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    if isinstance(data, list):
+        return pd.DataFrame(data)
+    elif isinstance(data, dict) and "conversion_rates" in data:
+        rates = data["conversion_rates"]
+        return pd.DataFrame(
+            [{"currency": k, "rate": v} for k, v in rates.items()]
+        )
+    else:
+        raise ValueError("Formato de arquivo não suportado")

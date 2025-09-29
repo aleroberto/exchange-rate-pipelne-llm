@@ -1,0 +1,11 @@
+{
+  "conversion_rates": {
+    "USD": 1.0,
+    "EUR": 0.9
+  },
+  "_metadata": {
+    "timestamp": "2025-09-29T02:15:50.871804",
+    "status_code": 200,
+    "url": "https://v6.exchangerate-api.com/v6/8a06ec3bc48c9257951a0c70/latest/USD"
+  }
+}
