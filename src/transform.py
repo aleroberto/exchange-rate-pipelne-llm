@@ -1,18 +1,21 @@
 import os
 import json
-from decimal import Decimal
+import time
 import pandas as pd
 from datetime import datetime
-import structlog
+from src.logging_config import get_logger, log_metrics
 
-logger = structlog.get_logger()
 RAW_DIR = os.path.join(os.path.dirname(__file__), "../data/raw")
 SILVER_DIR = os.path.join(os.path.dirname(__file__), "../data/silver")
 REJECT_DIR = os.path.join(RAW_DIR, "rejects")
 os.makedirs(SILVER_DIR, exist_ok=True)
 os.makedirs(REJECT_DIR, exist_ok=True)
 
-def transform_file(filepath, expected_base="USD"):
+def transform_file(filepath, run_id=None, expected_base="USD"):
+    logger = get_logger(run_id=run_id, service="transform")
+    logger.info("transform_start", arquivo=filepath)
+    start = time.time()
+
     with open(filepath, "r", encoding="utf-8") as f:
         data = json.load(f)
 
@@ -48,19 +51,17 @@ def transform_file(filepath, expected_base="USD"):
     silver_file = os.path.join(SILVER_DIR, f"{date_str}.parquet")
     df.to_parquet(silver_file, engine="pyarrow", compression="snappy", index=False)
     logger.info("transform_ok", arquivo=silver_file, count=len(df))
+
+    elapsed = time.time() - start
+    log_metrics(logger, "transform", df.shape[0], elapsed)
+
     return silver_file
 
 def clean_data(df: pd.DataFrame) -> pd.DataFrame:
-    """Remove taxas nulas ou negativas e garante colunas esperadas."""
+    """Remove taxas nulas ou negativas e garante colunas essenciais."""
     if df.empty:
         return df
-
-    # Remove valores nulos ou negativos
     df = df.dropna(subset=["rate"])
     df = df[df["rate"] > 0]
-
-    # Mantém apenas colunas essenciais
-    expected_cols = ["currency", "rate"]
-    df = df[expected_cols]
-
-    return df.reset_index(drop=True)
+    expected_cols = ["base_currency", "target_currency", "rate"]
+    return df[expected_cols].reset_index(drop=True)
