@@ -65,3 +65,16 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     df = df[df["rate"] > 0]
     expected_cols = ["base_currency", "target_currency", "rate"]
     return df[expected_cols].reset_index(drop=True)
+
+def main(date_str=None):
+    if not date_str:
+        date_str = datetime.utcnow().strftime("%Y-%m-%d")
+
+    raw_file = os.path.join(RAW_DIR, f"{date_str}.json")
+    if not os.path.exists(raw_file):
+        print(f"Arquivo RAW não encontrado: {raw_file}")
+        return
+
+    silver_file = transform_file(raw_file)
+    print(f"Arquivo SILVER gerado: {silver_file}")
+
