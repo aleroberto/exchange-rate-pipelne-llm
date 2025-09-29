@@ -44,3 +44,14 @@ def save_to_sqlite(df: pd.DataFrame, dbfile: str | Path, table_name: str):
     conn = sqlite3.connect(dbfile)
     df.to_sql(table_name, conn, if_exists="replace", index=False)
     conn.close()
+    
+def main(date_str=None):
+    if not date_str:
+        date_str = datetime.utcnow().strftime("%Y-%m-%d")
+
+    files = [f for f in os.listdir(SILVER_DIR) if f.endswith(".parquet") and date_str in f]
+    if not files:
+        print(f"Nenhum arquivo SILVER encontrado para {date_str}")
+        return
+
+    df_list = [pd.read_parquet(os.path.join(SILVER

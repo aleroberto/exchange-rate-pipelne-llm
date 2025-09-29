@@ -5,6 +5,8 @@ import requests
 from tenacity import retry, stop_after_attempt, wait_exponential
 from dotenv import load_dotenv
 import structlog
+import argparse
+
 
 load_dotenv()
 logger = structlog.get_logger()
@@ -69,3 +71,11 @@ def load_local_file(filepath: str):
         )
     else:
         raise ValueError("Formato de arquivo não suportado")
+    
+def main(date_str=None):
+    if not date_str:
+        date_str = datetime.utcnow().strftime("%Y-%m-%d")
+    
+    raw_file = fetch_exchange_rates(base_currency="USD")
+    print(f"Ingested file: {raw_file}")
+
