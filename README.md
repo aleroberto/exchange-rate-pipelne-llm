@@ -56,3 +56,22 @@ Logs são salvos localmente em `logs/` e ajudam a monitorar:
 - Número de erros
 - Tempo de execução
 - Correlacionamento entre etapas usando `run_id`
+
+
+### Executando etapas isoladas via CLI
+
+O pipeline pode ser executado por etapa usando o script principal de cada módulo e a CLI. Exemplo de comandos:
+
+- Rodar ingest para uma data específica:
+  python src/ingest.py --date YYYY-MM-DD
+
+- Rodar transform para uma data específica:
+  python src/transform.py --date YYYY-MM-DD
+
+- Rodar load para uma data específica:
+  python src/load.py --date YYYY-MM-DD
+
+- Rodar LLM enrichment para uma data específica:
+  python src/llm_enrich.py --date YYYY-MM-DD
+
+Substitua `YYYY-MM-DD` pela data desejada no formato ano-mês-dia.  
