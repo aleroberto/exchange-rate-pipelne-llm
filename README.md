@@ -39,3 +39,20 @@ pip install -r requirements.txt
 python -m pytest
 
 - Todos os testes devem passar.  
+
+
+### Logging e Observabilidade
+
+O pipeline utiliza logging estruturado em JSON com os seguintes campos padrão:
+- `timestamp`: data e hora da execução
+- `service`: módulo que gerou o log (ingest, transform, load, llm)
+- `level`: nível do log (INFO, ERROR)
+- `message`: descrição do evento
+- `run_id`: identificador da execução
+- `filename`: arquivo processado (quando aplicável)
+
+Logs são salvos localmente em `logs/` e ajudam a monitorar:
+- Número de cotações processadas
+- Número de erros
+- Tempo de execução
+- Correlacionamento entre etapas usando `run_id`
