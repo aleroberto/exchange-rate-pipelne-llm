@@ -253,7 +253,8 @@ volatilidade > limiar. Compare com mês anterior e cite percentuais."
 streamlit run app.py
 ```
 
-* Nenhuma requisição externa é feita. O dashboard depende apenas dos dados locais.
+* Acesso pelo browser:  https://exchange-rate-pipelne-llm-kgexm2u6o4j5eyxohcoenz.streamlit.app/
+
 
 ---
 
