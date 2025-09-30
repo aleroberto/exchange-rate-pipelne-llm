@@ -88,4 +88,10 @@ def main(date_str=None):
         print(f"Nenhum arquivo Silver encontrado para {date_str}")
 
 if __name__ == "__main__":
-    main()
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Load script")
+    parser.add_argument("--date", help="Data (YYYY-MM-DD)")
+    args = parser.parse_args()
+
+    main(date_str=args.date)
