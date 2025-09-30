@@ -242,6 +242,20 @@ volatilidade > limiar. Compare com mês anterior e cite percentuais."
 
 ---
 
+## 📊 Dashboard Streamlit
+
+* Executa offline usando os arquivos existentes em `data/gold/`.
+* Lê **todos os Parquet** para mostrar evolução histórica.
+* Lê **todos os insights JSON** e os exibe juntos.
+* Filtros interativos permitem escolher moedas específicas.
+
+```bash
+streamlit run app.py
+```
+
+* Nenhuma requisição externa é feita. O dashboard depende apenas dos dados locais.
+
+---
 
 
 
