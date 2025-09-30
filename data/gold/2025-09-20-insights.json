@@ -1,11 +1,11 @@
 {
-    "date": "2025-09-29",
+    "date": "2025-09-20",
     "summary": "Mercado cambial reagiu a indicadores econômicos recentes.",
     "top_risks": [
         "Demanda global instável",
-        "Crise geopolítica",
-        "Preço do petróleo",
-        "Flutuação do dólar"
+        "Inflação EUA",
+        "Flutuação do dólar",
+        "Volatilidade do Euro"
     ],
     "source": "OpenAI GPT-4 (simulado)"
 }
